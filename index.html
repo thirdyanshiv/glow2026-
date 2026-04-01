@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>21 Day Glow Up Challenge</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #FFF9F5; color: #2C2C2A; min-height: 100vh; }
+  .top { background: linear-gradient(135deg, #F0997B, #D4537E); padding: 2rem 1.5rem 3rem; text-align: center; color: white; }
+  .top h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+  .top p { font-size: 14px; opacity: 0.85; margin-top: 6px; }
+  .stars { font-size: 22px; margin-bottom: 10px; }
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 500px; margin: -1.5rem auto 0; padding: 0 1rem; }
+  .stat { background: white; border-radius: 16px; padding: 14px 10px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .stat-num { font-size: 26px; font-weight: 700; color: #D4537E; }
+  .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
+  .content { max-width: 500px; margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+  .section-title { font-size: 13px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; margin: 1.5rem 0 0.75rem; }
+  .day-card { background: white; border-radius: 16px; padding: 1rem 1.25rem; margin-bottom: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); border: 1.5px solid transparent; transition: border-color 0.2s; }
+  .day-card.complete { border-color: #5DCAA5; }
+  .day-card.today { border-color: #D4537E; }
+  .day-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  .day-left { display: flex; align-items: center; gap: 10px; }
+  .day-emoji { font-size: 20px; width: 36px; height: 36px; background: #FFF0F5; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+  .day-emoji.done { background: #E1F5EE; }
+  .day-info h3 { font-size: 15px; font-weight: 600; }
+  .day-info p { font-size: 12px; color: #888; margin-top: 2px; }
+  .badge { font-size: 11px; padding: 3px 10px; border-radius: 99px; font-weight: 600; }
+  .badge-today { background: #FBEAF0; color: #D4537E; }
+  .badge-done { background: #E1F5EE; color: #0F6E56; }
+  .badge-locked { background: #F1EFE8; color: #888; }
+  .chevron { font-size: 16px; color: #ccc; transition: transform 0.2s; }
+  .chevron.open { transform: rotate(180deg); }
+  .habits-section { margin-top: 12px; border-top: 1px solid #F1EFE8; padding-top: 12px; display: none; }
+  .habits-section.open { display: block; }
+  .habit-row { display: flex; align-items: center; gap: 10px; padding: 8px 6px; border-radius: 10px; cursor: pointer; transition: background 0.15s; }
+  .habit-row:hover { background: #FFF5F8; }
+  .habit-row:active { background: #FFE8F0; }
+  .circle { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #E0D8D8; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s; }
+  .circle.checked { background: #5DCAA5; border-color: #5DCAA5; }
+  .tick { width: 10px; height: 7px; border-left: 2px solid white; border-bottom: 2px solid white; transform: rotate(-45deg) translateY(-1px); display: none; }
+  .circle.checked .tick { display: block; }
+  .habit-name { font-size: 14px; color: #2C2C2A; flex: 1; }
+  .habit-name.done { text-decoration: line-through; color: #B4B2A9; }
+  .habit-icon { font-size: 16px; width: 28px; text-align: center; }
+  .progress-wrap { margin-top: 10px; }
+  .progress-bg { height: 5px; background: #F1EFE8; border-radius: 99px; }
+  .progress-fg { height: 100%; background: linear-gradient(90deg, #F0997B, #D4537E); border-radius: 99px; transition: width 0.3s; }
+  .progress-text { font-size: 11px; color: #B4B2A9; margin-top: 4px; text-align: right; }
+  .motivation { background: linear-gradient(135deg, #FBEAF0, #E1F5EE); border-radius: 16px; padding: 1.25rem; margin-top: 1.5rem; text-align: center; }
+  .motivation p { font-size: 14px; color: #555; line-height: 1.6; }
+  .motivation strong { color: #D4537E; }
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="stars">✨ 🌸 ✨</div>
+  <h1>21 Day Glow Up Challenge</h1>
+  <p>Ek din ek kadam — 3 mahine mein full transformation!</p>
+</div>
+
+<div class="stats-row">
+  <div class="stat">
+    <div class="stat-num" id="s-habits">0</div>
+    <div class="stat-label">habits done</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="s-days">0</div>
+    <div class="stat-label">days complete</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="s-streak">🔥0</div>
+    <div class="stat-label">day streak</div>
+  </div>
+</div>
+
+<div class="content">
+  <div class="section-title">Your daily habits</div>
+  <div id="days"></div>
+
+  <div class="motivation">
+    <p>Yaar <strong>consistency hi key hai!</strong><br>Roz ek ek step — 21 din baad khud fark dikhega 🌸</p>
+  </div>
+</div>
+
+<script>
+const habits = [
+  { icon: "🍋", name: "Warm nimbu paani subah" },
+  { icon: "🥜", name: "5-6 badam soaked khao" },
+  { icon: "💪", name: "45 min workout / skipping" },
+  { icon: "🌿", name: "Daily skincare routine" },
+  { icon: "💆", name: "Hair oiling / care" },
+  { icon: "🚫", name: "No junk food" },
+  { icon: "📱", name: "Social media sirf 3x10 min" },
+  { icon: "🧘", name: "5 min meditation" },
+  { icon: "💧", name: "8 glass paani" },
+  { icon: "🌙", name: "Raat 8 ke baad kuch nahi" },
+  { icon: "🫒", name: "Nabhi mein til tel" },
+  { icon: "😴", name: "Jaldi so jao 10-11 baje" }
+];
+
+let data = {};
+try { data = JSON.parse(localStorage.getItem('glow21v2') || '{}'); } catch(e) {}
+
+function save() {
+  try { localStorage.setItem('glow21v2', JSON.stringify(data)); } catch(e) {}
+}
+
+function updateStats() {
+  let totalH = 0, totalD = 0, streak = 0, tempStreak = 0;
+  for (let d = 1; d <= 21; d++) {
+    const arr = data[d] || [];
+    totalH += arr.length;
+    if (arr.length === habits.length) { totalD++; tempStreak++; streak = Math.max(streak, tempStreak); }
+    else tempStreak = 0;
+  }
+  document.getElementById('s-habits').textContent = totalH;
+  document.getElementById('s-days').textContent = totalD;
+  document.getElementById('s-streak').textContent = '🔥' + streak;
+}
+
+function renderDays() {
+  const container = document.getElementById('days');
+  container.innerHTML = '';
+  for (let d = 1; d <= 21; d++) {
+    const arr = data[d] || [];
+    const done = arr.length === habits.length;
+    const isToday = d === 1;
+    const pct = Math.round((arr.length / habits.length) * 100);
+
+    const card = document.createElement('div');
+    card.className = 'day-card' + (done ? ' complete' : '') + (isToday ? ' today' : '');
+
+    let badge = '';
+    if (done) badge = '<span class="badge badge-done">complete ✓</span>';
+    else if (isToday) badge = '<span class="badge badge-today">today</span>';
+    else badge = '<span class="badge badge-locked">day ' + d + '</span>';
+
+    card.innerHTML = `
+      <div class="day-header" onclick="toggleDay(${d}, this)">
+        <div class="day-left">
+          <div class="day-emoji ${done ? 'done' : ''}">${done ? '🌸' : '🌱'}</div>
+          <div class="day-info">
+            <h3>Day ${d}</h3>
+            <p>${arr.length}/${habits.length} habits</p>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${badge}
+          <span class="chevron ${isToday ? 'open' : ''}">▼</span>
+        </div>
+      </div>
+      <div class="habits-section ${isToday ? 'open' : ''}" id="hs-${d}">
+        <div id="hlist-${d}"></div>
+        <div class="progress-wrap">
+          <div class="progress-bg"><div class="progress-fg" style="width:${pct}%"></div></div>
+          <div class="progress-text">${pct}% complete</div>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+
+    const hlist = document.getElementById('hlist-' + d);
+    habits.forEach((h, i) => {
+      const checked = arr.includes(i);
+      const row = document.createElement('div');
+      row.className = 'habit-row';
+      row.innerHTML = `
+        <div class="circle ${checked ? 'checked' : ''}"><div class="tick"></div></div>
+        <span class="habit-icon">${h.icon}</span>
+        <span class="habit-name ${checked ? 'done' : ''}">${h.name}</span>
+      `;
+      row.onclick = () => {
+        if (!data[d]) data[d] = [];
+        const idx = data[d].indexOf(i);
+        if (idx > -1) data[d].splice(idx, 1);
+        else data[d].push(i);
+        save();
+        renderDays();
+        updateStats();
+      };
+      hlist.appendChild(row);
+    });
+  }
+  updateStats();
+}
+
+window.toggleDay = function(d, headerEl) {
+  const hs = document.getElementById('hs-' + d);
+  const chev = headerEl.querySelector('.chevron');
+  hs.classList.toggle('open');
+  chev.classList.toggle('open');
+};
+
+renderDays();
+</script>
+</body>
+</html>
